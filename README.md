@@ -44,4 +44,4 @@ This project was created as part of the Unity Learn course "3D Stealth Game: Hau
 This project is for educational purposes only. All assets are used under the Unity Learn license.
 
 ---
-Last updated: July 26, 2025
+*Last updated: July 26, 2025*
