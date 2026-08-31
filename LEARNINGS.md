@@ -44,7 +44,7 @@
 - 2026-08-31: プレイヤーの移動入力は Player.prefab にシリアライズされた単体 InputAction（MoveAction）。キー割り当ての追加は .prefab の m_SingletonActionBindings に 2DVector コンポジット（m_Flags:4）+ 4方向パート（m_Flags:8）を追記するだけでよく、C# 変更不要。Main.unity 側にオーバーライドはない。
 - 2026-08-31: プレイヤーの移動速度調整は Baby_Player_Controller の Crawling ステート m_Speed で行う（現在 1.5）。ルートモーション駆動のためアニメ再生速度と移動速度が常に一致し、足滑りなしで増減できる。
 
-- 2026-08-31: ライティング演出の構成: 雷は Main.unity の Directional Light（通常 intensity 0、青白 0.78/0.83/1）に LightningFlash.cs + AudioSource(SFXThunder.wav) を載せ、RenderSettings.ambientLight(Flatモード、ほぼ黒 0.01/0.013/0.022)と連動フリッカー。幽霊は Ghost.prefab の子 Lantern_Light（ポイント、橙、range6/intensity3、影なし）、ガーゴイルは Gargoyle.prefab の子 Gaze_Light（スポット45°、赤、PointOfViewと同じ y1.4/下向き20°）。URPの AdditionalLightsPerObjectLimit は 8 に引き上げ済み。
+- 2026-08-31: ライティング演出の構成: 雷は Main.unity の Directional Light（通常 intensity 0、青白 0.78/0.83/1）に LightningFlash.cs + AudioSource(SFXThunder.wav) を載せ、RenderSettings.ambientLight(Flatモード、ほぼ黒 0.01/0.013/0.022)と連動フリッカー。幽霊は Ghost.prefab の子 Lantern_Light（ポイント、橙、range6/intensity3、影なし）、ガーゴイルは Gargoyle.prefab の子 Gaze_Light（スポット45°、赤、PointOfViewと同じ y1.4/下向き20°）。URPの AdditionalLightsPerObjectLimit は 8 に引き上げ済み。プレイヤーの視認用に Player.prefab の子 Baby_Glow（ポイント、橙 1/0.6/0.25「小さな明かりを持っている」演出、range2.5/intensity1.2、影なし）。Lightのrangeは親のスケール(2,2,2)の影響を受けないが、子のlocalPosition yは2倍される点に注意。
 
 ## Open Questions
 （未解決・要調査）

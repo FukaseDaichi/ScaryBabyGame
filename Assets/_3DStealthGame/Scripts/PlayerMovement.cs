@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float turnSpeed = 20f;
     // アニメの歩幅に対する移動距離の倍率。1で見た目と完全一致、上げると再生速度を変えずに速く進む
-    public float moveSpeedMultiplier = 5f;
+    public float moveSpeedMultiplier = 7.5f;
 
     Rigidbody m_Rigidbody;
     Vector3 m_Movement;
