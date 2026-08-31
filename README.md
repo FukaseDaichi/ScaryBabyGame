@@ -1,47 +1,44 @@
-# 3D Stealth Game: Haunted House
+# 3Dステルスゲーム: Haunted House（幽霊屋敷）
 
-A stealth game where players must navigate through a haunted house while avoiding detection by supernatural entities. Built with Unity.
+超常的な存在に見つからないように幽霊屋敷を進んでいくステルスゲームです。Unity で制作しています。
 
-## Game Overview
+## ゲーム概要
 
-In this atmospheric horror-stealth game, you play as a character trapped in a haunted house filled with supernatural dangers. Use the environment to avoid detection and escape the haunted house.
+雰囲気重視のホラー×ステルスゲームです。プレイヤーは超常的な危険に満ちた幽霊屋敷に閉じ込められたキャラクターを操作します。地形やオブジェクトを活用して発見を回避し、幽霊屋敷からの脱出を目指します。
 
-## Features
+## 特徴
 
-- Haunted house environment with multiple rooms and hiding spots
-- AI enemies with patrol patterns and detection mechanics
-- Atmospheric horror elements
+- 複数の部屋と隠れ場所がある幽霊屋敷のステージ
+- 巡回パターンと発見（探知）機能を備えた AI 敵キャラクター
+- 雰囲気を高めるホラー演出
 
-## Installation
+## インストール手順
 
-1. Clone the repository
-2. Open the project in Unity 6or later
-3. Open the main scene located in `Assets/_3DStealthGame/Scenes/`
-4. Press Play in the Unity Editor or build the project
+1. リポジトリをクローンする
+2. Unity 6 以降でプロジェクトを開く
+3. `Assets/_3DStealthGame/Scenes/` にあるメインシーンを開く
+4. Unity エディターで Play を押す、またはプロジェクトをビルドする
 
-## Project Structure
+## プロジェクト構成
 
-- `/Assets` - All game assets
-  - `/_3DStealthGame` - Main game folder
-    - `/Art` - 3D models, textures, and materials
-    - `/Audio` - Sound effects and music
-    - `/Prefabs` - Reusable game objects
-    - `/Scenes` - Game levels and menus
-    - `/Scripts` - C# scripts
-    - `/Settings` - Game configuration files
-    - `/UI` - User interface elements
+- `/Assets` - すべてのゲームアセット
+  - `/_3DStealthGame` - メインのゲームフォルダー
+    - `/Art` - 3D モデル、テクスチャ、マテリアル
+    - `/Audio` - 効果音と音楽
+    - `/Prefabs` - 再利用可能なゲームオブジェクト
+    - `/Scenes` - ゲームのレベルとメニュー
+    - `/Scripts` - C# スクリプト
+    - `/Settings` - ゲームの設定ファイル
+    - `/UI` - ユーザーインターフェース要素
 
-## Play the Game
+## 開発について
 
-You can play the latest version of the game here: [Play Haunted House](https://play.unity.com/en/games/8b73f5b9-8462-4937-90b2-ad4a59e283a8/3d-stealth-game-haunted-house)
+本プロジェクトは Unity Learn のコース「3D Stealth Game: Haunted House」の一環として作成されました。
 
-## Development
+## ライセンス
 
-This project was created as part of the Unity Learn course "3D Stealth Game: Haunted House".
-
-## License
-
-This project is for educational purposes only. All assets are used under the Unity Learn license.
+本プロジェクトは教育目的のみを対象としています。すべてのアセットは Unity Learn のライセンスに基づいて使用しています。
 
 ---
-*Last updated: July 26, 2025*
+
+_最終更新日: 2025年7月26日_
