@@ -31,6 +31,10 @@
     - `/Settings` - ゲームの設定ファイル
     - `/UI` - ユーザーインターフェース要素
 
+## ゲームをプレイする
+
+最新版はこちらからプレイできます: [Haunted House をプレイ](https://play.unity.com/en/games/8b73f5b9-8462-4937-90b2-ad4a59e283a8/3d-stealth-game-haunted-house)
+
 ## 開発について
 
 本プロジェクトは Unity Learn のコース「3D Stealth Game: Haunted House」の一環として作成されました。
