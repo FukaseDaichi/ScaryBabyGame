@@ -44,6 +44,8 @@
 - 2026-08-31: プレイヤーの移動入力は Player.prefab にシリアライズされた単体 InputAction（MoveAction）。キー割り当ての追加は .prefab の m_SingletonActionBindings に 2DVector コンポジット（m_Flags:4）+ 4方向パート（m_Flags:8）を追記するだけでよく、C# 変更不要。Main.unity 側にオーバーライドはない。
 - 2026-08-31: プレイヤーの移動速度調整は Baby_Player_Controller の Crawling ステート m_Speed で行う（現在 1.5）。ルートモーション駆動のためアニメ再生速度と移動速度が常に一致し、足滑りなしで増減できる。
 
+- 2026-08-31: 幽霊の接近サウンドは Ghost.prefab の AudioSource（SFXGhostMove.wav ループ、spatialBlend=1）で実現済み。AudioListener はカメラでなく Player.prefab に載せてあるため、見下ろしカメラでも「プレイヤー↔幽霊の距離」で減衰する。rolloffCustomCurve の time 軸は MaxDistance（現在10m）で正規化された 0〜1。恐怖演出用に線形→凹型カーブ（1m:0.65／6m:0.12、近距離/遠距離比 5.4倍）+ Volume 1.0 に変更済み。
+- 2026-08-31: AnimationCurve をYAMLで手書きしたら、キー列から3次Hermite補間を再計算する小スクリプトで単調性・負値なし・端点値を机上検証できる（Unityのカーブはキー間が h00*v0+h10*dt*outSlope0+h01*v1+h11*dt*inSlope1 の標準Hermite）。
 - 2026-08-31: ライティング演出の構成: 雷は Main.unity の Directional Light（通常 intensity 0、青白 0.78/0.83/1）に LightningFlash.cs + AudioSource(SFXThunder.wav) を載せ、RenderSettings.ambientLight(Flatモード、ほぼ黒 0.01/0.013/0.022)と連動フリッカー。幽霊は Ghost.prefab の子 Lantern_Light（ポイント、橙、range6/intensity3、影なし）、ガーゴイルは Gargoyle.prefab の子 Gaze_Light（スポット45°、赤、PointOfViewと同じ y1.4/下向き20°）。URPの AdditionalLightsPerObjectLimit は 8 に引き上げ済み。プレイヤーの視認用に Player.prefab の子 Baby_Glow（ポイント、橙 1/0.6/0.25「小さな明かりを持っている」演出、range2.5/intensity1.2、影なし）。Lightのrangeは親のスケール(2,2,2)の影響を受けないが、子のlocalPosition yは2倍される点に注意。
 
 ## Open Questions
