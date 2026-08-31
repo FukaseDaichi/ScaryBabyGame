@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,7 +7,6 @@ public class PlayerMovement : MonoBehaviour
     Animator m_Animator;
     public InputAction MoveAction;
 
-    public float walkSpeed = 1.0f;
     public float turnSpeed = 20f;
 
     Rigidbody m_Rigidbody;
@@ -28,15 +25,14 @@ public class PlayerMovement : MonoBehaviour
     {
         var pos = MoveAction.ReadValue<Vector2>();
 
-        float horizontal = pos.x;
-        float vertical = pos.y;
-
-        m_Movement.Set(horizontal, 0f, vertical);
+        m_Movement.Set(pos.x, 0f, pos.y);
         m_Movement.Normalize();
 
-        bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
-        bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
-        bool isWalking = hasHorizontalInput || hasVerticalInput;
+        // 衝突でソルバーが与えた速度が残留すると入力なしでも滑走するため、毎ステップ打ち消す
+        m_Rigidbody.linearVelocity = Vector3.zero;
+        m_Rigidbody.angularVelocity = Vector3.zero;
+
+        bool isWalking = m_Movement.sqrMagnitude > 0f;
         m_Animator.SetBool("IsWalking", isWalking);
 
         if (isWalking)
@@ -45,16 +41,20 @@ public class PlayerMovement : MonoBehaviour
             {
                 m_AudioSource.Play();
             }
+
+            Vector3 desiredForward = Vector3.RotateTowards(transform.forward, m_Movement, turnSpeed * Time.deltaTime, 0f);
+            m_Rotation = Quaternion.LookRotation(desiredForward);
         }
         else
         {
             m_AudioSource.Stop();
         }
+    }
 
-        Vector3 desiredForward = Vector3.RotateTowards(transform.forward, m_Movement, turnSpeed * Time.deltaTime, 0f);
-        m_Rotation = Quaternion.LookRotation(desiredForward);
-
+    void OnAnimatorMove()
+    {
+        // 移動量はルートモーション由来。アニメの歩幅と実移動が常に一致するので足滑りしない
+        m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * m_Animator.deltaPosition.magnitude);
         m_Rigidbody.MoveRotation(m_Rotation);
-        m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * walkSpeed * Time.deltaTime);
     }
 }

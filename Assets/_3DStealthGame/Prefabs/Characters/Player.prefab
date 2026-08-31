@@ -150,7 +150,6 @@ MonoBehaviour:
       m_Flags: 8
     m_Flags: 0
     m_Priority: 0
-  walkSpeed: 0.7
   turnSpeed: 20
 --- !u!95 &3576229132089318325
 Animator:
@@ -165,7 +164,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 6f3f76d2663724532b0445905a87c16e, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 1
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 1

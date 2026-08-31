@@ -15,6 +15,8 @@
 - 2026-08-31: FBXの埋め込みマテリアル名はバイナリを `([\x20-\x7e]+)\x00\x01Material` の正規表現でスキャンすれば取得でき、.meta の externalObjects でプロジェクト内マテリアルへ再マップできる。
 - 2026-08-31: Unityエディタが別Spaceにある場合、`screencapture -l<windowID>`（Quartz CGWindowListでID取得）で前面化せずにウィンドウを撮影できる。ただしバックグラウンドのUnityは再描画しないため、映像は最後にフォーカスがあった時点のもの。
 
+- 2026-08-31: Unityのレイキャスト系バグは、Playモードで再現しなくても .prefab のシリアライズ値（コライダー寸法・目線位置・スケール）を集めてレイ×カプセル距離を計算する小スクリプトで「旧実装は全ケースFalse／新実装は全ケースTrue」を机上で証明できる。修正前にバグ条件を数値で再現・否定でき、エディタ起動に依存しない。
+
 ## Mistakes to Avoid
 （失敗と再発防止策）
 
@@ -27,6 +29,7 @@
 - 2026-08-31: 赤ちゃんモデル（Crawling.fbx, mixamoリグ）の埋め込みマテリアル名は `5_meshes_Merge`。表示用マテリアルは Baby_URP.mat（URP Lit + Baby_Albedo/Baby_Normal）で、.meta の externalObjects で再マップ済み。
 - 2026-08-31: ハイハイのような左右非対称ループでは、クリップの Root Rotation 基準が Body Orientation（keepOriginalOrientation:0）だと平均向きがヨーずれし、直進中もモデルが斜めを向く。Original（keepOriginalOrientation:1）にすると解消する。
 - 2026-08-31: プレイヤーの見た目サイズは Player.prefab ルートの m_LocalScale で調整する（現在 2,2,2）。ルートを一様スケールすればコライダー・Humanoidアニメーションごと正しく拡大される。Main.unity のインスタンスはスケールをオーバーライドしていない。
+- 2026-08-31: 敵の視認は Observer.cs（PointOfView プレハブ、Ghost目線0.75m/Gargoyle目線1.4m）のレイキャストのみで判定。狙い先はプレイヤーコライダーの bounds.center（赤ちゃんの寝そべりカプセルはワールドで y 0〜0.6m しかなく、旧実装の「ピボット+1m」狙いでは全距離で頭上を通過して絶対に当たらなかった）。
 
 ## Open Questions
 （未解決・要調査）

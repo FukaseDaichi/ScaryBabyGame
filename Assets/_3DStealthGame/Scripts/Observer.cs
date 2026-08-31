@@ -7,6 +7,12 @@ public class Observer : MonoBehaviour
     public Transform player;
     bool m_IsPlayerInRange;
     public GameEnding gameEnding;
+    Collider m_PlayerCollider;
+
+    void Start()
+    {
+        m_PlayerCollider = player.GetComponent<Collider>();
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -28,7 +34,7 @@ public class Observer : MonoBehaviour
     {
         if (m_IsPlayerInRange)
         {
-            Vector3 direction = player.position - transform.position + Vector3.up;
+            Vector3 direction = m_PlayerCollider.bounds.center - transform.position;
             Ray ray = new Ray(transform.position, direction);
             RaycastHit raycastHit;
 
