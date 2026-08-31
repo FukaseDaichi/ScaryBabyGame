@@ -17,6 +17,10 @@
 
 - 2026-08-31: Unityのレイキャスト系バグは、Playモードで再現しなくても .prefab のシリアライズ値（コライダー寸法・目線位置・スケール）を集めてレイ×カプセル距離を計算する小スクリプトで「旧実装は全ケースFalse／新実装は全ケースTrue」を机上で証明できる。修正前にバグ条件を数値で再現・否定でき、エディタ起動に依存しない。
 
+- 2026-08-31: Unityを前面化してもログの反映には数十秒かかる。プロジェクト直下 Logs/Editor.log の行番号を控え、その行以降に対象アセットの Importing 行と「Mono: successfully reloaded assembly」が出て `error CS` が無いことまで確認して初めて「反映済み」と判断する。
+
+- 2026-08-31: `tell application "Unity" to activate` は効かないことがある。`tell application "System Events" to set frontmost of (first process whose unix id is <pid>) to true` なら確実に前面化でき、Editor.log にアセットリフレッシュが流れる。
+
 ## Mistakes to Avoid
 （失敗と再発防止策）
 
@@ -30,6 +34,12 @@
 - 2026-08-31: ハイハイのような左右非対称ループでは、クリップの Root Rotation 基準が Body Orientation（keepOriginalOrientation:0）だと平均向きがヨーずれし、直進中もモデルが斜めを向く。Original（keepOriginalOrientation:1）にすると解消する。
 - 2026-08-31: プレイヤーの見た目サイズは Player.prefab ルートの m_LocalScale で調整する（現在 2,2,2）。ルートを一様スケールすればコライダー・Humanoidアニメーションごと正しく拡大される。Main.unity のインスタンスはスケールをオーバーライドしていない。
 - 2026-08-31: 敵の視認は Observer.cs（PointOfView プレハブ、Ghost目線0.75m/Gargoyle目線1.4m）のレイキャストのみで判定。狙い先はプレイヤーコライダーの bounds.center（赤ちゃんの寝そべりカプセルはワールドで y 0〜0.6m しかなく、旧実装の「ピボット+1m」狙いでは全距離で頭上を通過して絶対に当たらなかった）。
+
+- 2026-08-31: プレイヤー移動の2バグの根本原因: (1) 移動中の滑り＝Crawling クリップの Root Transform Position (XZ) が Bake Into Pose（loopBlendPositionXZ:1）で、這い前進がポーズ側に焼き込まれ、ループごとに前進→スナップバックしてカプセルの等速移動とズレていた。(2) 入力なし移動＝dynamic Rigidbody（減衰0）に衝突でソルバーが与えた速度が残留し続けていた。対策はルートモーション駆動（loopBlendPositionXZ:0 + ApplyRootMotion:1 + OnAnimatorMove で deltaPosition.magnitude を使用）と、FixedUpdate での linearVelocity/angularVelocity ゼロ化。
+- 2026-08-31: MovePosition で動かす dynamic Rigidbody は速度をリセットしない限り、衝突で得た velocity が入力ゼロでも永続する（MovePosition は velocity を上書きしない）。Kinematic 化は静的コライダーをすり抜けるため不可。毎 FixedUpdate の velocity ゼロ化が最小の対処。
+
+- 2026-08-31: プレイヤーの移動入力は Player.prefab にシリアライズされた単体 InputAction（MoveAction）。キー割り当ての追加は .prefab の m_SingletonActionBindings に 2DVector コンポジット（m_Flags:4）+ 4方向パート（m_Flags:8）を追記するだけでよく、C# 変更不要。Main.unity 側にオーバーライドはない。
+- 2026-08-31: プレイヤーの移動速度調整は Baby_Player_Controller の Crawling ステート m_Speed で行う（現在 1.5）。ルートモーション駆動のためアニメ再生速度と移動速度が常に一致し、足滑りなしで増減できる。
 
 ## Open Questions
 （未解決・要調査）

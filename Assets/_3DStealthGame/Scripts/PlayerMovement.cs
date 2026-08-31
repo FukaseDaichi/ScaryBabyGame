@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     public InputAction MoveAction;
 
     public float turnSpeed = 20f;
+    // アニメの歩幅に対する移動距離の倍率。1で見た目と完全一致、上げると再生速度を変えずに速く進む
+    public float moveSpeedMultiplier = 5f;
 
     Rigidbody m_Rigidbody;
     Vector3 m_Movement;
@@ -53,8 +55,8 @@ public class PlayerMovement : MonoBehaviour
 
     void OnAnimatorMove()
     {
-        // 移動量はルートモーション由来。アニメの歩幅と実移動が常に一致するので足滑りしない
-        m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * m_Animator.deltaPosition.magnitude);
+        // 移動量の基準はルートモーション（アニメが止まれば移動も止まる）
+        m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * (m_Animator.deltaPosition.magnitude * moveSpeedMultiplier));
         m_Rigidbody.MoveRotation(m_Rotation);
     }
 }

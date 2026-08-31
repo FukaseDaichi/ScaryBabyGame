@@ -143,9 +143,49 @@ MonoBehaviour:
     - m_Name: right
       m_Id: 87af8a92-ddd9-4fee-b7af-1e3e7604ae92
       m_Path: <Keyboard>/d
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
+      m_Interactions:
+      m_Processors:
+      m_Groups:
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: Arrows
+      m_Id: d0bcf378-52d5-4a49-b8b8-ad37d954741c
+      m_Path: 2DVector
+      m_Interactions:
+      m_Processors:
+      m_Groups:
+      m_Action: Move
+      m_Flags: 4
+    - m_Name: up
+      m_Id: 20872911-30c9-41d3-a06b-a48af544db75
+      m_Path: <Keyboard>/upArrow
+      m_Interactions:
+      m_Processors:
+      m_Groups:
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 429578a7-d712-4a78-ae4c-c100f39826f3
+      m_Path: <Keyboard>/downArrow
+      m_Interactions:
+      m_Processors:
+      m_Groups:
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 961c3721-f9e1-48a6-88a5-5cfbfcda773a
+      m_Path: <Keyboard>/leftArrow
+      m_Interactions:
+      m_Processors:
+      m_Groups:
+      m_Action: Move
+      m_Flags: 8
+    - m_Name: right
+      m_Id: 0665dd3a-c2f4-4b3f-abc5-56e893307454
+      m_Path: <Keyboard>/rightArrow
+      m_Interactions:
+      m_Processors:
+      m_Groups:
       m_Action: Move
       m_Flags: 8
     m_Flags: 0
