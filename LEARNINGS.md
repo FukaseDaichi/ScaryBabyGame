@@ -24,11 +24,15 @@
 - 2026-08-31: Playモードの光量演出は、Unityを前面化した状態で `screencapture -l<windowID>` を短間隔で連写し、ゲームビュー領域の平均輝度を数値化すれば検証できる（雷フラッシュ＝ベースライン8→ピーク34の単発スパイクとして観測できた）。全フレームのmd5が一致したら「変化なし」ではなくUnityがバックグラウンドで再描画停止している判定不能状態。
 - 2026-08-31: 新規アセット（.cs/.wav）は自前で .meta を書いてGUIDを固定すれば、Unityの取り込み前にシーンやプレハブのYAMLから参照を張れる。C#スクリプトのコンパイル反映は Assembly-CSharp.dll に `strings` で型名が入ったこと+ログの「Mono: successfully reloaded assembly」+`error CS` ゼロで確認できる。
 
+- 2026-09-01: 同名クラスが複数ある（例: `PlayerMovement` が Scripts/ と Tutorial_Demo/ の2箇所）とき、プレハブが実際にどちらを使っているかは `.cs.meta` の GUID を取り出して `.prefab` を grep すれば断定できる。クラス名やファイル名だけで推測しない。
+
 ## Mistakes to Avoid
 （失敗と再発防止策）
 
 - 2026-08-31: EditorApplication.delayCall の一括修正スクリプトは Play モード中に発火すると早期リターンして部分適用のまま残る（コントローラーは変更済み・プレハブは未保存、という中途半端な状態が実際に発生）。一時的な修正は完了確認後に即削除するか、最初からアセット直接編集にする。
 - 2026-08-31: Unityが開いたままアセットファイルを外部編集すると SourceAssetDB の mtime 不整合で Import Error Code:(4) が出る。次のリフレッシュで自己解決するが、ログの後続リフレッシュ成功まで確認して初めて「反映済み」と判断できる。
+
+- 2026-09-01: 「スクリプトが実装済みで存在する」を「使える」と読んだ誤り（Key.cs/Door.cs を流用可能として企画に書いた）。ファイルの存在は動作の保証ではない。再利用可能と言う前に、参照している型が実際にシーン上のオブジェクトへ解決するかまで確認する。
 
 ## Domain Knowledge
 （業務・仕様に関する事実）
@@ -47,6 +51,9 @@
 - 2026-08-31: 幽霊の接近サウンドは Ghost.prefab の AudioSource（SFXGhostMove.wav ループ、spatialBlend=1）で実現済み。AudioListener はカメラでなく Player.prefab に載せてあるため、見下ろしカメラでも「プレイヤー↔幽霊の距離」で減衰する。rolloffCustomCurve の time 軸は MaxDistance（現在10m）で正規化された 0〜1。恐怖演出用に線形→凹型カーブ（1m:0.65／6m:0.12、近距離/遠距離比 5.4倍）+ Volume 1.0 に変更済み。
 - 2026-08-31: AnimationCurve をYAMLで手書きしたら、キー列から3次Hermite補間を再計算する小スクリプトで単調性・負値なし・端点値を机上検証できる（Unityのカーブはキー間が h00*v0+h10*dt*outSlope0+h01*v1+h11*dt*inSlope1 の標準Hermite）。
 - 2026-08-31: ライティング演出の構成: 雷は Main.unity の Directional Light（通常 intensity 0、青白 0.78/0.83/1）に LightningFlash.cs + AudioSource(SFXThunder.wav) を載せ、RenderSettings.ambientLight(Flatモード、ほぼ黒 0.01/0.013/0.022)と連動フリッカー。幽霊は Ghost.prefab の子 Lantern_Light（ポイント、橙、range6/intensity3、影なし）、ガーゴイルは Gargoyle.prefab の子 Gaze_Light（スポット45°、赤、PointOfViewと同じ y1.4/下向き20°）。URPの AdditionalLightsPerObjectLimit は 8 に引き上げ済み。プレイヤーの視認用に Player.prefab の子 Baby_Glow（ポイント、橙 1/0.6/0.25「小さな明かりを持っている」演出、range2.5/intensity1.2、影なし）。Lightのrangeは親のスケール(2,2,2)の影響を受けないが、子のlocalPosition yは2倍される点に注意。
+
+- 2026-09-01: Key.cs / Door.cs（Tutorial_Demo/Demo_Scripts/Bonus Features）は動かない。両者は `namespace StealthGame` にあり `GetComponent<PlayerMovement>()` が `StealthGame.PlayerMovement`（旧デモ版、AddKey/OwnKey を持つ）に解決されるが、Player.prefab が載せているのはグローバル名前空間の Scripts/PlayerMovement.cs（GUID 86896e74253be974087d57269d65c059、鍵メソッドなし）。よって常に null が返り、鍵も扉も反応しない。使うには現行 PlayerMovement に所持リストを足して参照を張り替える必要がある。
+- 2026-09-01: ゲーム全体の構成: Main.unity には Level A と Level C のプレハブを配置し、Ghost 8体 + Gargoyle 3体。部屋プレハブは Start / Corridor / Kitchen / Dinning / Bedroom / Bathroom / Finish の7種。勝ちは Room_Finish のトリガー到達で Application.Quit、負けは GameEnding.cs が Main シーンを再読み込みするだけで、どちらも物語的な意味づけがない。
 
 ## Open Questions
 （未解決・要調査）
