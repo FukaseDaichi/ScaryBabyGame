@@ -55,6 +55,10 @@
 - 2026-09-01: Key.cs / Door.cs（Tutorial_Demo/Demo_Scripts/Bonus Features）は動かない。両者は `namespace StealthGame` にあり `GetComponent<PlayerMovement>()` が `StealthGame.PlayerMovement`（旧デモ版、AddKey/OwnKey を持つ）に解決されるが、Player.prefab が載せているのはグローバル名前空間の Scripts/PlayerMovement.cs（GUID 86896e74253be974087d57269d65c059、鍵メソッドなし）。よって常に null が返り、鍵も扉も反応しない。使うには現行 PlayerMovement に所持リストを足して参照を張り替える必要がある。
 - 2026-09-01: ゲーム全体の構成: Main.unity には Level A と Level C のプレハブを配置し、Ghost 8体 + Gargoyle 3体。部屋プレハブは Start / Corridor / Kitchen / Dinning / Bedroom / Bathroom / Finish の7種。勝ちは Room_Finish のトリガー到達で Application.Quit、負けは GameEnding.cs が Main シーンを再読み込みするだけで、どちらも物語的な意味づけがない。
 
+- 2026-09-02: 検知系の実態: Observer.cs は PointOfView トリガー内でレイがプレイヤーに当たった瞬間に GameEnding.CaughtPlayer() を呼ぶ完全な即死判定で、疑心・探索・追跡の中間状態は一切ない。幽霊の移動は AIPatrol.cs（NavMeshAgent 速度3.5、半径5m・5秒ごとのランダム目的地）で経路は読めない。雷（LightningFlash.cs）・Lantern_Light・Gaze_Light・Baby_Glow はすべて演出のみで判定に関与しない。
+- 2026-09-02: 未使用アセットの棚卸し: EyeGhost_Model.fbx、Ghost@Shower.fbx + Shower.prefab（VFX）、Key.FBX、Level B.prefab、Ivan/JohnLemon の人型モデルと Walk/Idle クリップ、Tutorial_Demo/WaypointPatrol.cs（StealthGame 名前空間、Rigidbody 直接駆動）は Main.unity から参照されておらず、敵の個性分けやセットピースの素材として空いている。
+- 2026-09-02: LightningFlash.cs は雷鳴の再生と閃光の開始が同一フレームで、予告となる先行音がない。雷をルール化（閃光中の判定変更）するなら、雷鳴を先行させる順序変更と IsFlashing フラグの公開が最小差分になる。
+
 ## Open Questions
 （未解決・要調査）
 
